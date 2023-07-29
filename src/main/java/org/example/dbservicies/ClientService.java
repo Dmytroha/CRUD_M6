@@ -14,7 +14,7 @@ public class ClientService {
     }
 
     public long create(String name) throws SQLException {
-        Long id = -1L;
+        long id = -1L;
         ResultSet resultSet;
         try(
                 PreparedStatement statement = connection.prepareStatement("insert into client (name) values (?)",
@@ -34,7 +34,6 @@ public class ClientService {
    public String getById(long id) throws SQLException {
         ResultSet resultSet;
         String result="";
-
         try(PreparedStatement statement = connection.prepareStatement("select name from client where id = ?")){
             statement.setLong(1,id);
             statement.execute();
@@ -42,16 +41,32 @@ public class ClientService {
             if(resultSet.next()) result=resultSet.getString("name");
 
         }catch(SQLException e){
-           logger.error("Sql statement error!!!");
+           logger.error("select by id fail!!!");
            throw e;
         }
         return result;
    }
-    public void setName(long id, String name){
-// update name in table client where client.id=id
+    public void setName(long id, String name) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement("update client set name = ? where id = ?")){
+            statement.setString(1, name);
+            statement.setLong(2,id);
+            statement.execute();
+
+        }catch(SQLException e){
+            logger.error("update fail!");
+            throw e;
+        }
+
     }
-    public void deleteById(long id){
-// delete client where id = id
+    public void deleteById(long id) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement("delete from client where id = ?")){
+            statement.setLong(1,id);
+            statement.execute();
+
+        }catch(SQLException e){
+            logger.error("delete fail!");
+            throw e;
+        }
     }
  public List<Client> listAll() throws SQLException {
      Client client;
@@ -66,7 +81,7 @@ public class ClientService {
                 clientList.add(client);
             }
         }catch(SQLException e){
-            logger.error("Sql statement error!!!");
+            logger.error("listAll  fail! ");
             throw e;
         }
       return clientList;

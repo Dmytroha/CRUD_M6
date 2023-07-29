@@ -16,12 +16,21 @@ public class AppLauncher {
         logger.info("Application started.");
         ClientService clientService = new ClientService(Database.getInstance().getConnection());
         try{
+            logger.info("Create new client with name 'Lebovski'");
             long clientId= clientService.create("Lebovski");
-            String clientName = clientService.getById(clientId);
-            logger.info("Check creation: clientId {} name {}",
-                    clientId,
-                    clientName);
+            String clientName = clientService.getById(clientId); // get new client name by ID
+            logger.info("Check creation of new client ID = '{}' NAME = '{}'", clientId, clientName);
+            logger.info("Try to change name of client to 'Ken Block' ID = {}", clientId);
+            clientService.setName(clientId,"Ken Block");
+            clientName = clientService.getById(clientId); // get new name
+            logger.info("Get updated name of client ID = '{}' NAME = '{}'", clientId, clientName);
+            logger.info("Try to delete client         ID = {}", clientId);
+            clientService.deleteById(clientId);
+            clientName=clientService.getById(clientId);
+            logger.info("Check is client name empty   ID = '{}' NAME = '{}' ",clientId, clientName);
+            logger.info("Get list of all clients");
             clientService.listAll().forEach(client->logger.info("ID = {}  NAME = {}",client.getId(),client.getName()));
+
         }catch(SQLException e){
             logger.error("clientService execution failed!!! ");
         }
