@@ -31,9 +31,23 @@ public class ClientService {
             return id;
         }
     }
-   public String getById(long id){
+   public String getById(long id) throws SQLException {
+        ResultSet resultSet;
+        Client client;
+        String result="";
 
-        return "";
+        try(PreparedStatement statement = connection.prepareStatement("select name from client where id = ?")){
+            statement.setLong(1,id);
+            statement.execute();
+            resultSet = statement.getResultSet();
+            //resultSet = statement.executeQuery();
+            if(resultSet.next()) result=resultSet.getString("name");
+
+        }catch(SQLException e){
+           logger.error("Sql statement error!!!");
+           throw e;
+        }
+        return result;
    }
     public void setName(long id, String name){
 // update name in table client where client.id=id

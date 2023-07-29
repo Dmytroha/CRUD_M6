@@ -1,4 +1,4 @@
-package org.example.mirationservice;
+package org.example.migrationservice;
 import org.flywaydb.core.Flyway;
 public class FlywayDbMigration {
     public static void main(String[] args) {
