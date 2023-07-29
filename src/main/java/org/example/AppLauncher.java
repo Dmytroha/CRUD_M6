@@ -16,14 +16,14 @@ public class AppLauncher {
         logger.info("Application started.");
         ClientService clientService = new ClientService(Database.getInstance().getConnection());
         try{
-            Long clientId= clientService.create("Lebovski");
-            logger.info("clientId {} ",clientId);
-            logger.info("name {}",clientService.getById(clientId.longValue()));
-
+            long clientId= clientService.create("Lebovski");
+            String clientName = clientService.getById(clientId);
+            logger.info("Check creation: clientId {} name {}",
+                    clientId,
+                    clientName);
+            clientService.listAll().forEach(client->logger.info("ID = {}  NAME = {}",client.getId(),client.getName()));
         }catch(SQLException e){
-
-            logger.error("clientService.create(); failed!!! ");
-
+            logger.error("clientService execution failed!!! ");
         }
 
 

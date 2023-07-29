@@ -13,7 +13,7 @@ public class ClientService {
         this.connection = connection;
     }
 
-    public long create(String name) throws SQLException, IllegalArgumentException {
+    public long create(String name) throws SQLException {
         Long id = -1L;
         ResultSet resultSet;
         try(
@@ -33,14 +33,12 @@ public class ClientService {
     }
    public String getById(long id) throws SQLException {
         ResultSet resultSet;
-        Client client;
         String result="";
 
         try(PreparedStatement statement = connection.prepareStatement("select name from client where id = ?")){
             statement.setLong(1,id);
             statement.execute();
             resultSet = statement.getResultSet();
-            //resultSet = statement.executeQuery();
             if(resultSet.next()) result=resultSet.getString("name");
 
         }catch(SQLException e){
